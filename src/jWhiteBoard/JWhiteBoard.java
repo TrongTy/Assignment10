@@ -131,7 +131,7 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
      */
     public void setGroupName(String groupName) {
         if(groupName != null)
-            groupName=groupName;
+            this.groupName=groupName;
     }
 
 
@@ -567,17 +567,38 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
         else if("Leave".equals(command)) {
             stop();
         }
-         else if ("Brush".equals(command)) {
+        else if (e.getSource()==joinButton) {
+			 /**String d= JOptionPane.showInputDialog(null, "Please Input Group Name");
+             if(d==null){
+                    JOptionPane.showMessageDialog(null, "Please Input Group Name");
+                    channel.disconnect();
+             }**/
+			String d = "";
+			d = txtGroup.getText();
+             groupName=d;
+             if(!noChannel && !useState){
+            	 try {
+            		 channel.disconnect();
+                     channel.connect(groupName);
+				} catch (Exception e2) {
+					// TODO: handle exception
+					
+				}
+            	 System.out.println(groupName);
+                 setTitle(groupName);
+             }
+	}
+        else if ("Brush".equals(command)) {
 			colorButton1.setVisible(true);
 			BrSize.setVisible(true);
 			cmb.setVisible(true);
 			colorButton2.setVisible(false);
-         }
-          else if ("Color Brush".equals(command)) {
+        }
+        else if ("Color Brush".equals(command)) {
 			Color cbrush = JColorChooser.showDialog(null, "Choose Brush Color",
 					Color.BLACK);
 			drawColor = cbrush;
-          }
+        }
         else
             System.out.println("Unknown action");
     }
