@@ -413,21 +413,21 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
      * @param title : frame's title
      */
     void setTitle(String title) {
-        String tmp="";
-        if(noChannel) {
-            mainFrame.setTitle("JWhiteBoard");
-            return;
-        }
-        if(title != null) {
-            mainFrame.setTitle(title);
-        }
-        else {
-            if(channel.getAddress() != null)
-                tmp+=channel.getAddress();
-            tmp+=" (" + memberSize + ")";
-            mainFrame.setTitle(tmp);
-        }
-    }
+		String tmp = "";
+		if (noChannel) {
+			mainFrame.setTitle("JWhiteBoard");
+			return;
+		}
+		if (title != null) {
+			mainFrame.setTitle(title);
+		} else {
+			if (channel.getAddress() != null)
+				tmp += getGroupName() + "-";
+			tmp += channel.getAddress();
+			tmp += " (" + memberSize + ")";
+			mainFrame.setTitle(tmp);
+		}
+	}
 
     void setTitle() {
         setTitle(null);
@@ -568,25 +568,19 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
             stop();
         }
         else if (e.getSource()==joinButton) {
-			 /**String d= JOptionPane.showInputDialog(null, "Please Input Group Name");
-             if(d==null){
-                    JOptionPane.showMessageDialog(null, "Please Input Group Name");
-                    channel.disconnect();
-             }**/
-			String d = "";
-			d = txtGroup.getText();
-             groupName=d;
-             if(!noChannel && !useState){
-            	 try {
-            		 channel.disconnect();
-                     channel.connect(groupName);
+            String d = txtGroup.getText();
+            groupName=d;
+            if (!noChannel && useState)
+           	 try {
+           		 channel.disconnect();
+                 channel.connect(groupName);
 				} catch (Exception e2) {
 					// TODO: handle exception
-					
+					e2.printStackTrace();
 				}
-            	 System.out.println(groupName);
-                 setTitle(groupName);
-             }
+           	 System.out.println(groupName);
+                setTitle(channel.getAddress()+" (" +memberSize +") " +" Group: "+groupName);
+            
 	}
         else if ("Brush".equals(command)) {
 			colorButton1.setVisible(true);
@@ -882,7 +876,19 @@ public class JWhiteBoard extends ReceiverAdapter implements ActionListener, Chan
                 g.drawImage(img, 0, 0, null);
             }
         }
-
+	public void functionSetTitle() {
+			System.out.println("Set title");
+			setGroupName(txtGroup.getText());
+			if (!noChannel && !useState)
+				try {
+					channel.disconnect();
+					channel.connect(groupName);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			setTitle();
+	}
     }
 
 }
